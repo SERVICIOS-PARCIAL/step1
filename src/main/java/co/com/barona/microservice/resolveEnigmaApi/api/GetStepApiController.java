@@ -6,9 +6,13 @@ import co.com.barona.microservice.resolveEnigmaApi.model.Header;
 import co.com.barona.microservice.resolveEnigmaApi.model.JsonApiBodyRequest;
 import co.com.barona.microservice.resolveEnigmaApi.model.JsonApiBodyResponseSuccess;
 import io.swagger.annotations.*;
+
+import org.apache.camel.EndpointInject;
+import org.apache.camel.FluentProducerTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -18,6 +22,9 @@ import javax.validation.Valid;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2024-02-27T21:16:02.967-05:00[America/Bogota]")
 @Controller
 public class GetStepApiController implements GetStepApi {
+	
+	//@EndpointInject(uri = "direct:get-step-one")
+	//private FluentProducerTemplate fluentProducerTemplate;
 
 public ResponseEntity<JsonApiBodyResponseSuccess> getStep(@ApiParam(value = "request body get enigma Step", required = true) @Valid @RequestBody JsonApiBodyRequest body) {
     	
@@ -31,13 +38,14 @@ public ResponseEntity<JsonApiBodyResponseSuccess> getStep(@ApiParam(value = "req
     	
     	return new ResponseEntity<>(listResponse, HttpStatus.NOT_IMPLEMENTED);*/
     	
+	//fluentProducerTemplate.request();
     	GetEnigmaRequest enigmaRequest = body.getData().get(0);
         Header header = enigmaRequest.getHeader();
         String id = header.getId();
         String type = header.getType();
         String enigma = enigmaRequest.getEnigma();
 
-        String solution = answerEnigma(enigma);
+        String solution = "Step1: Put the giraffe in .)";
 
         GetEnigmaStepResponse response = new GetEnigmaStepResponse();
         response.setId(id);
@@ -51,8 +59,10 @@ public ResponseEntity<JsonApiBodyResponseSuccess> getStep(@ApiParam(value = "req
     	
     }
 
-    private String answerEnigma(String enigmaQuestion) {
-        return "Step1: Open the regrigerator.";
-    }
+		@GetMapping("/get")
+			public ResponseEntity<String> answerEnigma(String enigmaQuestion) {
+			return new ResponseEntity<String>("Step1: Open the regrigerator ", HttpStatus.OK);
+		}
+
 
 }
